@@ -13,14 +13,34 @@ Fairly often, I get carried away by the illustration and absolutely forget about
 
 
 ## Saving the artwork in SVG format
-
-### Fix _1_ and id's
-
+At this point everything is ready to transform my drawing into SVG image. Adobe Illustrator natively supports saving vector images to fully editable SVG format, so it's not some kind of temporary export option. But I prefer to simply copy generated SVG code into my text editor and work with it there. To do this I go to File/SaveAs and in the format dropdown at the bottom select SVG. 
+In the nice dialog stuffed with tons of options that pops up I generally keep everything by default, cause I really don't know what all those options mean, but here's a couple moments to keep an eye on: 
+SVG Profile: SVG 1.1
+Tick off the checkbox Preserve Illustrator editing capabilities
+Next, I click the button SVG Code... to see the actual code, and copy it into my editor Sublime Text. 
+### Fix _1_ and id's in the SVG code
+You probably noticed Illustrator's excellent naming convention for the generated SVG code.
+```
 <g id="Stars">
 	<path id="StarSmall3_1_" class="st8" d="M12,12.3c0,0-0.1,4.2-3.9,4.6c3.8,0.3,3.9,4.3,3.9,4.3s0-4,4.4-4.4
 		C12.6,16.4,12,12.3,12,12.3z"/>
 	<path id="StarSmall2_1_" class="st8" d="M68.9,26.7c0,0-0.1,4.2-3.9,4.6c3.8,0.3,3.9,4.3,3.9,4.3s0-4,4.4-4.4
 		C69.5,30.8,68.9,26.7,68.9,26.7z"/>
-	<path id="StarSmall_1_" class="st8" d="M155.8,22.1c0,0-0.1,4.2-3.9,4.6c3.8,0.3,3.9,4.3,3.9,4.3s0-4,4.4-4.4
-		C156.4,26.3,155.8,22.1,155.8,22.1z"/>
 </g>
+```
+
+Yeah, those annoying underscores are a pain in the butt :) But I fix that using replace in Sublime (Ctrl + H) and replace _1_ to nothing. In the same way I prefer to replace all id's in the SVG to classes. However, one thing to note here: you can't reference gradients and other dynamic fills with classes. So, I'll manually go and change those to ids.  
+### Remove hidden layers with raster images
+Sometimes in Illustrator I use raster image as a background for outlining. And it's no big deal, when I'm done with the drawing I simply make it a hidden layer and forget about it. But those images still show up in the generated SVG code, so I remove them manually. They're usually not that hard to notice because of their distinct BLOB-like view in the document. 
+
+## Putting SVG image into an HTML file
+Ok, at this point I usually have pretty cleaned-up SVG file which now needs to be embedded in some kind of web page. The simplest way here would be of course to dump it into CodePen's Html box and start playing around with JavaScript and CSS right away. However, due to the lack of stable Internet connection I'm forced to do everything locally. 
+I've created a blank project which I just copy, rename the folder and it's basically ready for the next steps.
+And the next step is to inline SVG code into html page. Of course there's multiple variants of including your SVGs in the page, but I chose inline variant because:
+- it's more performant
+- it saves you another HTTP-request
+- gives you the ability to control everything with JavaScript and CSS
+- you can attach event handlers to everything
+
+### Put SVGs inside a container
+I always try to put my SVGs inside of a containing element, in that way it can be easily centered, resized, and overall it's much easier to work with it.
